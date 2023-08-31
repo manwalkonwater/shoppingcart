@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-for</title>
+</head>
+<body>
+    <div id="app">
+        <button 
+            v-for="(pageitem, index) in menu" 
+            :key="index"
+            :class="className"
+        >
+            {{index + 1}}.
+            {{pageitem}}
+        </button>
+        <ul>
+            <li v-for="(page, index) in menuArray" :key="index">
+                <a :href="page.link">{{page.name}}</a>
+            </li>
+        </ul>
+
+        <p v-for="(item, itemKey, index) in info" :key="itemKey">
+            {{index}}.
+            {{itemKey}}:
+            {{item}}
+        </p>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const app = Vue.createApp({
+            data(){
+                return {
+                    count: 10,
+                    className: 'page pageItem',
+                    menu: ['最新消息','最新消息','園區介紹','牧場體驗','常見問題'],
+                    menuArray: [
+                        {link: 'new.html',name: '最新消息'},
+                        {link: 'about.html',name: '園區介紹'},
+                        {link: 'activity.html',name: '牧場體驗'},
+                        {link: 'QA.html',name: '常見問題'},
+                    ],
+                    info: {
+                        title: 'VueJs課程',
+                        author: '🐢',
+                        publishedAt: '2022-07'
+                    }
+                }
+            }
+        }).mount('#app')        
+    </script>
+</body>
+</html>

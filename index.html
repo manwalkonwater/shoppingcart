@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue3</title>
+</head>
+<body>
+    <div id="app">
+        <h6 class="hide-ff">姓名：{{name}}</h6>
+        <!-- key = css name -->
+        <!-- value = data key -->
+        <p v-bind:class="{'hide-ff': good, 'text-aqua': aqua}">數量：{{count}}</p>
+        <!-- <p :class="{'hide-ff': good}">{{blood}}</p> -->
+        <img :src="imgURl" :alt="name">
+        <a :href="link">google</a>
+        <p>{{obj}}</p>
+    </div>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    //新增一個應用application→ 建立Vue實體(instance)，並掛載(mount)在網頁結點上
+    Vue.createApp({
+        // string, number, array, object, boolean
+        data(){
+            return {
+                name: '🐢', //string
+                count: 0,   // number
+                blood: ['O', 'A', 'B', 'AB'], //array
+                obj: {
+                    f:1,
+                    g:0
+                }, //object,
+                good: false, //boolean
+                aqua: true,
+                imgURl: 'https://picsum.photos/300/200',
+                link: 'http://www.google.com'
+            }
+        }
+    }).mount("#app");
+</script>
+</body>
+</html>
+<style>
+    .hide-ff{
+        opacity: 0.3;
+        /* display: none; */
+    }
+    .text-aqua{
+        color: rgb(71, 98, 205);
+    }
+    img{
+        width: 5rem;
+    }
+</style>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-if</title>
+</head>
+<body>
+    <div id="app">
+        <button 
+            v-for="item in icon"
+            class="fa-brands fa-lg" 
+            :class="item">
+            {{item}}
+        </button>
+
+        <button v-on:click="clickTab('A', 1, 2)">A</button>
+        <button @click="clickTab('B')">B</button>
+        <button @mouseenter="clickTab('C')">C</button>
+        <button @click.prevent="clickTab('D')">
+            D
+        </button>
+
+        <div class="box">
+            <transition>
+                <div v-if="tab === 'A'">AAA</div>
+                <div v-else-if="tab === 'B'">BBB</div>
+                <div v-else>{{tab}}</div>
+            </transition>
+        </div>
+
+        <div v-show="tab == 'A'" class="box">$AAA$</div>
+        <div v-show="tab == 'B'" class="box">$BBB$</div>
+        <div v-show="tab !== 'A' && tab !== 'B'">${{tab}}$</div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const app = Vue.createApp({
+            data(){
+                return {
+                    tab: 'A',
+                    test: '123',
+                    icon: ['fa-instagram', 'fa-facebook']
+                }
+            },
+            methods: {
+                clickTab(activeTab, tt, dd){
+                    this.tab = activeTab
+                }
+            },
+        }).mount('#app')        
+    </script>
+</body>
+</html>
+<style>
+    #app > div{
+        width: 10rem;
+        height: 5rem;
+        font-size: 2rem;
+        margin: .25rem;
+        background-color: #ddd;
+    }
+    .box{
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .box > div{
+        position: absolute;
+        top: 3rem;
+        left: 0;
+    }
+    .v-enter-active,
+    .v-leave-active {
+        /* transition: opacity 2s ease; */
+        transition: color 2s ease;
+    }
+    .v-enter-from,
+    .v-leave-to {
+        /* opacity: 0; */
+        color: blue;
+    }
+    .v-enter-to,
+    .v-leave-from {
+        /* opacity: 1; */
+        color: red;
+    }
+</style>

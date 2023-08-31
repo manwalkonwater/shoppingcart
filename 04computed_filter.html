@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue3</title>
+</head>
+<body>
+    <div id="app">
+        <!-- <div>
+            <input type="text" @input="handleSearch">
+            單向綁定：{{ searchInput }}
+        </div> -->
+        <div>
+            <input type="text" v-model="searchInput2" >
+            雙向綁定：{{ searchInput2 }}
+            <button @click="searchClick">搜尋</button>
+            <button @click="reset">reset</button>
+        </div>
+        <div>
+            <input type="checkbox">filter</input>
+        </div>
+        <p>資料量：{{prodCount}}</p>
+        <div v-if="prodCount === 0">
+            nodata
+        </div>
+        <div class="wrap" v-else>
+            <div 
+                v-for="prod in productDisplay" 
+                :key="prod.id"
+                class="card"
+            >
+                <div v-if="prod">
+                    <p>{{prod.title}}</p>
+                    <div class="cardImg">
+                        <img :src="prod.image" :alt="prod.title">
+                    </div>
+                    <p>$ {{prod.price}}</p>
+                    <p v-if="prod.rating">
+                        <span v-for="star in ratingParseInt(prod.rating.rate)">
+                            🌟
+                        </span>
+                        {{prod.rating.count}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    Vue.createApp({
+        data(){
+            return {
+                products: [],
+                productDisplay: [],
+                searchInput: '',
+                searchInput2: '',
+            }
+        },
+        computed: {
+            prodCount(){
+                return this.productDisplay.length
+            }
+        },
+        methods: {
+            handleSearch(e){ //單向綁定
+                // console.log(e.target.value)
+                this.searchInput = e.target.value
+            },
+            ratingParseInt(rate){
+                if(rate){
+                    return Math.round(rate) 
+                }else{
+                    return 0
+                }
+                // return rate? Math.round(rate) : 0
+            },
+            searchClick(){
+                // console.log(this.searchInput2);
+                const res = this.products.filter((item, index, array)=>{
+                    // return item.title == this.searchInput2
+                    // return item.title.includes(this.searchInput2)
+                    const title = item.title.toUpperCase()
+                    const searchInput2 = this.searchInput2.toUpperCase()
+                    return title.includes(searchInput2)
+                })
+                this.productDisplay = res
+            },
+            reset(){
+                this.productDisplay = this.products
+            }
+        },
+        mounted() {
+            //最一開始初始化
+            fetch('https://fakestoreapi.com/products')
+            // .then(res=>res.json())
+            .then(res=>{
+                return res.json()
+            })
+            .then(json=>{
+                this.products = json
+                this.productDisplay = json
+            })
+        }
+    }).mount("#app");
+</script>
+</body>
+</html>
+<style>
+.wrap{
+    width: 100%;
+    height: 80vh;
+    overflow: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: .25rem;
+}
+.card{
+    box-sizing: border-box;
+    flex-basis: 49%;
+    border: 1px solid #ddd;
+    padding: .25rem;
+}
+.cardImg{
+    text-align: center;
+}
+img{
+    /* width: 80%; */
+    height: 5rem;
+}
+</style>

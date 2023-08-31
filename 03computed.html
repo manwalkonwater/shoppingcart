@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue3</title>
+</head>
+<body>
+    <div id="app">
+        <button 
+            class="btn"
+            :class="{'active': toggle}"
+            @click="updateToggle"
+        >
+            按鈕
+        </button>
+        <button 
+            :class="btnClass"
+            @click="updateToggle"
+        >
+            按鈕
+        </button>
+        <div v-if="prodCount === 0">
+            nodata
+        </div>
+        <div class="wrap" v-else>
+            <div 
+                v-for="prod in products" 
+                :key="prod.id"
+                class="card"
+            >
+                <div v-if="prod">
+                    <p class="cardName">{{prod.title}}</p>
+                    <img :src="prod.image" :alt="prod.title">
+                    <p>$ {{prod.price}}</p>
+                    <p v-if="prod.rating">
+                        <span v-for="star in parseInt(prod.rating.rate)">
+                            🌟
+                        </span>
+                        {{prod.rating.count}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p>資料量：{{prodCount}}</p>
+    </div>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    Vue.createApp({
+        data(){
+            return {
+                products: [],
+                toggle: false
+            }
+        },
+        computed: {
+            btnClass(){
+                if(this.toggle){
+                    return 'btn active'
+                }else{
+                    return 'btn'
+                }
+            },
+            prodCount(){
+                return this.products.length
+            }
+        },
+        methods: {
+            updateToggle(){
+                this.toggle = !this.toggle
+            }
+        },
+        mounted() {
+            fetch('https://fakestoreapi.com/products')
+            // .then(res=>res.json())
+            .then(res=>{
+                return res.json()
+            })
+            .then(json=>{
+                this.products = json
+            })
+        }
+    }).mount("#app");
+</script>
+</body>
+</html>
+<style>
+.wrap{
+    height: 80vh;
+    overflow: scroll;
+}
+.card{
+    width: 10rem;
+    border: 1px solid #ddd;
+    margin: .5rem;
+    padding: .5rem;
+}
+img{
+    width: 100%;
+}
+.btn{
+    background-color: rgb(206, 221, 221);
+    width: 10rem;
+    font-size: 2rem;
+}
+.btn.active{
+    background-color: rgb(232, 208, 166);
+}
+</style>
